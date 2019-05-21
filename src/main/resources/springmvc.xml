@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:tx="http://www.springframework.org/schema/tx"
+xmlns:mvc="http://www.springframework.org/schema/mvc"
+xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-4.3.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/mvc
+http://www.springframework.org/schema/mvc/spring-mvc.xsd
+">
+	<!-- 注解开启 。代替处理器映射器和处理器适配器 -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+	<context:component-scan base-package="com.zhiyou100"></context:component-scan>
+	<!-- <bean id="myConverter" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+	转换器
+		<property name="converters">
+			<list>
+				<bean class="com.zhiyou100.demo.MyConverter"></bean>
+			</list>
+		</property>
+	</bean> -->
+	
+	<!-- 配置全局异常处理器
+		只要是实现了handlerExceptionResolver接口就是全局异常处理器
+	 -->
+	<!-- <bean class="com.zhiyou100.demo.MyException"></bean> -->
+	
+	<!-- 文件上传解析器  -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>6291455</value>
+		</property>
+	</bean>
+	
+	<!-- 静态资源配置 -->
+	<mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
+	<mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
+	<mvc:resources location="/images/" mapping="/images/**"></mvc:resources>
+	<mvc:resources location="/pages/" mapping="/pages/**"></mvc:resources>
+	<mvc:resources location="/font/" mapping="/font/**"></mvc:resources>
+	<mvc:resources location="/admin/" mapping="/admin/**"></mvc:resources>
+	<mvc:resources location="/uploads/" mapping="/uploads/**"></mvc:resources>
+	<!--  校验器 
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		hibernate校验器
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator"></property>
+	
+	
+	</bean>
+	 -->
+	<!-- 拦截器  -->
+	<!-- <mvc:interceptors>
+		可以设置多个拦截器
+		<mvc:interceptor>
+			表示映射的路径  /**表示所有的映射
+			<mvc:mapping path="/**"/>
+			<bean class="com.zhiyou100.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors> -->
+	
+	<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+			
+			</list>
+		
+		</property>
+	</bean> -->
+	
+	<!-- 注解适配器 -->
+	<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"></bean>
+	注解映射器
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"></bean>
+ -->	<!-- 
+		mvc:annotation-driven可以代替上面两种注解适配器和注解映射器
+		mvc:annotation-driven可以默认加载很多参数绑定的方法
+		如：json数据转换解析器，
+		如果使用mvc:annotation-driven就不用再使用上面的RequestMappingHandlerAdapter和RequestMappingHandlerMapping
+		实际开发中就是用mvc:annotation-driven
+	
+	 -->
+	<!-- <mvc:annotation-driven></mvc:annotation-driven> -->
+	
+	
+	<!-- <bean id="stu" name="/stu.action" class="com.zhiyou100.demo.Handler2"></bean>
+	处理器适配器 
+		判断当前Handler是否实现了Controller接口
+	
+	<bean  class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"></bean>
+	<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"></bean>
+	
+	处理器映射器 
+		简单url映射器
+		<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+			<property name="mappings">
+				<props>
+				对stu进行url映射，url是/a.action
+					key：对应 需要进行映射的路径
+					标签中的内容：对应Handler对象的id值
+				
+					<prop key="/a.action">stu</prop>
+					<prop key="/b.action">stu</prop>
+				</props>			
+			
+			</property>
+		 </bean>
+	 -->
+	<!-- <bean  class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="interceptor1" />			
+			
+			</list>
+		</property>
+	</bean>
+	<bean id="interceptor1" class="com.zhiyou100.demo.HandlerInterceptor1"></bean>
+ -->
+	<!-- jsp的视图解析器 -->
+	<bean  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 配置jsp路径的前缀
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		配置jsp路径的后缀
+		<property name="suffix" value=".jsp"></property> -->
+	</bean>
+
+
+    <!-- html视图解析器 必须先配置freemarkerConfig,注意html是没有prefix前缀属性的-->
+    <!-- <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">  
+        <property name="templateLoaderPath">  
+            <value>/pages/</value>  
+        </property>  
+    </bean>  
+     <bean id="htmlviewResolver"  
+        class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">  
+        <property name="suffix" value=".html" /> 
+        <property name="order" value="0"></property> 
+        <property name="contentType" value="text/html;charset=UTF-8"></property>         
+    </bean>  -->
+
+</beans>

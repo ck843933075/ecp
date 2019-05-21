@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration 
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- <properties resource="db.properties">
+		
+			如果不想使用properties配置文件中的属性
+			可以在内部定义属性的值，会被外部文件覆盖掉
+		
+		<property name="jdbc.username" value="root123"/>
+	</properties> -->
+	
+	<!-- 开启二级缓存，意味着所有在本项目中的查询都会开启 -->
+	<settings>
+		<setting name="cacheEnabled" value="true"/>
+	</settings>
+	
+	<typeAliases>
+		<!-- 单个的别名定义 -->
+		<!-- <typeAlias type="com.zhiyou100.pojo.User" alias="User"/> -->
+		<!-- 批量别名定义 扫描整个包下的类  别名直接为类名(类名不区分大小写) -->
+		<package name="com.zhiyou100.pojo"/>
+	</typeAliases>
+	<!-- <environments default="development">
+		<environment id="development">
+			使用jdbc的事务管理 
+			<transactionManager type="JDBC" />
+			数据库连接池
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driver}" />
+				<property name="url" value="${jdbc.url}" />
+				<property name="username" value="${jdbc.username}" />
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+	</environments> -->
+	
+	<!-- <mappers>
+		<mapper resource="mapper/StudentMapper.xml" />
+	</mappers> -->
+</configuration>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	
+	<!-- 开启注解扫描 -->
+	<context:component-scan base-package="com.zhiyou100"></context:component-scan>
+	
+	<!-- 加载外部配置文件 -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	<!-- 设置数据库连接池 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" >
+		<property name="driverClass" value="${jdbc.driver}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
+		<property name="user" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+	
+	<!-- 配置sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 指定mybatis的核心核心配置文件 -->
+		<property name="configLocation" value="classpath:sqlMapConfig.xml"></property>
+		<!-- 配置数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- mapper的映射文件 -->
+		<property name="mapperLocations" value="classpath:mapper/*.xml" />
+	</bean>
+	
+	<!-- mapper代理的方式一：配置mapper代理对象 -->
+	<!-- <bean id="studentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		指定需要代理的mapper接口
+		<property name="mapperInterface" value="com.zhiyou100.mapper.StudentMapper"></property>
+		
+		配置sqlSessionFactory
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+	</bean> -->
+	
+	<!-- mapper代理的方式二：扫描包的方式配置代理 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 配置mapper接口 -->
+		<property name="basePackage" value="com.zhiyou100.mapper"></property>
+		
+		
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+	
+	
+	<!-- 配置dao保存在spring容器中  -->
+	<!-- <bean id="studentDao" class="com.zhiyou100.dao.impl.StudentDaoImpl">
+		配置实现类中的sqlSessionFactory属性
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+	</bean> -->
+	
+	<!-- 事务管理器  
+		mybatis使用数据源进行操作数据事务控制 
+		而spring操作的是jdbc的事务管理
+	-->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 设置数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- 开始事务注解扫描 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<!-- 配置事务增强   相当于环绕通知 -->
+	<!-- <tx:advice id="advice" transaction-manager="transactionManager">
+		做事务操作
+		<tx:attributes>
+			绑定事务操作的方法  操作事务的匹配规则
+			<tx:method name="add*" propagation="REQUIRED"/>
+			<tx:method name="update*" isolation="READ_COMMITTED"/>
+			<tx:method name="select*" isolation="READ_COMMITTED"/>
+			<tx:method name="insert*" isolation="READ_COMMITTED"/>
+			<tx:method name="delete*" read-only="true" isolation="REPEATABLE_READ"/>				
+		</tx:attributes>
+	
+	</tx:advice>
+	
+	配置切面
+	<aop:config>
+		设置切入点
+		<aop:pointcut expression="execution(* com.zhiyou100.*(..))" id="cut1"/>
+		设置切面
+		<aop:advisor advice-ref="advice" pointcut-ref="cut1"/>
+	</aop:config> -->
+</beans>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiyou100.mapper.StudentMapper">
+	<cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+<resultMap id="stu" type="student">
+	<id property="id" column="s_id"></id>
+	<result property="name" column="s_name"></result>
+</resultMap>
+	
+	<select id="queryById" parameterType="int" resultMap="stu" >
+		select * from student where s_id = #{id}
+	</select>
+
+</mapper>

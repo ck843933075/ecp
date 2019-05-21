@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiyou100.mapper.UserMapper">
+	<!-- <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/> -->
+
+	
+	<select id="checkMailPhone"  parameterType="java.lang.String" resultType="int">
+		select count(us_id) 
+		from user 
+		where
+				us_email = #{value}
+	</select>
+	
+	<select id="checkCodeTime" parameterType="java.lang.String" resultType="java.lang.String">
+		select create_time 
+		from user_code 
+		where user_tel_mail = #{value}
+		order by create_time desc 
+		limit 0 , 1 ;
+	</select>
+
+	<insert id="addCode" >
+		insert into user_code(user_tel_mail , code ,create_time ,code_status)
+		values(#{mailOrPhone}, #{mailCode} , now() , 0) 
+	</insert>
+	
+	<select id="checkCode" resultType="int">
+		select count(*) 
+		from user_code 
+		where user_tel_mail = #{mailOrPhone}
+		and code = #{code }
+		and code_status = 0;
+	
+	</select>
+	
+	<select id="login" resultType="int">
+		select count(*)
+		from user
+		where us_email = #{username}
+		and us_password = #{password }
+	</select>
+</mapper>

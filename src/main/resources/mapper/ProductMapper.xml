@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiyou100.mapper.ProductMapper">
+	<!-- <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/> -->
+	<!-- <insert id="addPic" parameterType="img"	>
+		insert into img(username , img)
+		values(#{username} , #{img})		
+	
+	</insert>
+	 -->
+	<insert id="addPics" parameterType="img"	>
+		insert into img(username , img , img2)
+		values(#{username} 
+		<foreach collection="img" item="image" open=","
+		close=")" separator="," >
+			#{image}
+		</foreach>
+	
+	</insert>
+	
+</mapper>
