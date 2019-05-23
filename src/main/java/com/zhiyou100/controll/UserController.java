@@ -1,5 +1,6 @@
 package com.zhiyou100.controll;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -50,15 +51,33 @@ public class UserController {
 	}
 	
 	@RequestMapping("/login")
-	public String login(String username , String password , HttpServletRequest request , HttpServletResponse response){
+	@ResponseBody
+	public ResultUtil login(String username , String password ,String save_pwd, HttpServletRequest request , HttpServletResponse response){
+//		save_pwd  yes no
+		
+		System.out.println(save_pwd);
+		
+		System.out.println("username : " + username );
+		System.out.println("password : " + password);
 		int num = userService.login(username , password);
 		System.out.println("num:" + num);
 		if(num == 1){
 			request.getSession().setAttribute("user", username);
-			return "/pages/index.html";
+			if(save_pwd.equals("yes")){
+				Cookie cookie1 = new Cookie("username", username);
+				cookie1.setMaxAge(1000*60*60);
+				Cookie cookie2 = new Cookie("password", password);
+				cookie2.setMaxAge(1000*60*60);
+				response.addCookie(cookie1);
+				response.addCookie(cookie2);
+			}
+			
+			return ResultUtil.success();
 		}else {
-			return "/pages/login.html";
+			return ResultUtil.error("no user");
 		}
 	}
+	
+	
 	
 }

@@ -38,6 +38,16 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		</property>
 	</bean>
 	
+	<!-- 拦截器  -->
+	<!-- <mvc:interceptors>
+		可以设置多个拦截器
+		<mvc:interceptor>
+			表示映射的路径  /**表示所有的映射
+			<mvc:mapping path="/new/new_*.html"/>
+			<bean class="com.zhiyou100.util.MyInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors> -->
+	
 	<!-- 静态资源配置 -->
 	<mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
 	<mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
@@ -54,15 +64,7 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd
 	
 	</bean>
 	 -->
-	<!-- 拦截器  -->
-	<!-- <mvc:interceptors>
-		可以设置多个拦截器
-		<mvc:interceptor>
-			表示映射的路径  /**表示所有的映射
-			<mvc:mapping path="/**"/>
-			<bean class="com.zhiyou100.interceptor.LoginInterceptor"></bean>
-		</mvc:interceptor>
-	</mvc:interceptors> -->
+	
 	
 	<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="messageConverters">
@@ -143,5 +145,5 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd
         <property name="order" value="0"></property> 
         <property name="contentType" value="text/html;charset=UTF-8"></property>         
     </bean>  -->
-
+<mvc:default-servlet-handler />
 </beans>

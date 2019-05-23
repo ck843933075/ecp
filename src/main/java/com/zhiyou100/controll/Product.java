@@ -9,18 +9,24 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.junit.runners.Parameterized.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.zhiyou100.pojo.Img;
+import com.zhiyou100.pojo.ProjectType;
+import com.zhiyou100.pojo.Region;
 import com.zhiyou100.service.ProductService;
 import com.zhiyou100.util.ImageUtil;
 
@@ -103,9 +109,40 @@ public class Product {
 	
 	}
 	
+	@RequestMapping("/province.do")
+	@ResponseBody
+	public Map<String , Object> getProvince(){
+		Map<String , Object> map = new HashMap<>();
+		//获取数据库中全部的省份
+		List<Region> list = productService.findAllProvince();
+		System.out.println("list: " +list);
+		map.put("province", list);
+		return map;
+	}
+	
+
+	@RequestMapping("/city.do")
+	@ResponseBody
+	public Map<String , Object> getCity( Integer id ){
+		Map<String , Object> map = new HashMap<>();
+		//获取数据库中全部的省份
+		List<Region> list = productService.findAllCities(id);
+		System.out.println("list: " +list);
+		map.put("cities", list);
+		return map;
+	}
+
+	@RequestMapping("/projectType.do")
+	@ResponseBody
+	public Map<String , Object> getProjectType(){
+		Map<String , Object> map = new HashMap<>();
+		//获取数据库中全部的省份
+		List<ProjectType> list = productService.findAllProjectType();
+		System.out.println("list: " +list);
+		map.put("projectTypes", list);
+		return map;
+	}
 }
-
-
 
 //	@RequestMapping("/file1")
 //	public ModelAndView addPic( MultipartFile file , HttpServletRequest request ,HttpServletResponse response) throws Exception{

@@ -52,19 +52,7 @@
 		</div>
 	</div>
 
-	<script>
-    var d_var=$(".search .search-txt").val();
-    $(".search .search-txt").focus(function(){
-        if($(this).val()==d_var){
-            $(this).val("");
-        }});
-
-    $(".search .search-txt").blur(function(){
-        if($(this).val()==""){
-            $(this).val("找项目");
-        }
-    });
-</script>
+	
 	<div class="login-container">
 
 		<div class="space-6"></div>
@@ -79,33 +67,34 @@
 
 						<div class="space-6"></div>
 
-						<form action="/Project1/user/login">
+						<form action="/Project1/user/remember" id="form1">
 							<fieldset>
 								<label class="block clearfix"> <span
 									class="block input-icon input-icon-left"> <i
 										class="ace-icon fa fa-user"></i> <input type="text"
-										name="username" class="form-control" placeholder="邮箱或手机号码" />
+										id="username" class="form-control" placeholder="邮箱或手机号码" />
 
 								</span>
 								</label> <label class="block clearfix"> <span
 									class="block input-icon input-icon-left"> <i
 										class="ace-icon fa fa-lock"></i> <input type="password"
-										name="password" class="form-control" placeholder="请输入密码" />
-
+										 id="password"  class="form-control" placeholder="请输入密码" />
+									<input type="hidden" id="pwd" name="pwd">
 								</span>
 								</label>
 
 								<div class="space"></div>
 
 								<div class="clearfix">
-									<label class="inline"> <input type="checkbox"
+									<label class="inline"> <input type="checkbox" id="checkbox1"
 										class="ace" /> <span class="lbl"> 记住</span>
+										<input type="hidden" id="save_pwd" name="save_pwd"/>
 									</label>
-
-									<input type="submit"
+									
+									
+									<input type="button" id="btn1" 
 										class="width-35 pull-right btn btn-sm btn-primary" value="登录" />
 										<i class="ace-icon fa fa-key"></i> <span class="bigger-110"></span>
-									
 								</div>
 
 								<div class="space-4"></div>
@@ -190,4 +179,74 @@
 		</div>
 	</div>
 </body>
+<script>
+    var d_var=$(".search .search-txt").val();
+    $(".search .search-txt").focus(function(){
+        if($(this).val()==d_var){
+            $(this).val("");
+        }});
+
+    $(".search .search-txt").blur(function(){
+        if($(this).val()==""){
+            $(this).val("找项目");
+        }
+    });
+    
+    $(function(){
+  		checkCookie();
+  	})
+    
+    window.onload=function(){
+    	$("#btn1").click(function(){
+    		alert("checked:" + $("#checkbox1")[0].checked)
+    		if($("#checkbox1")[0].checked){
+        		$("#save_pwd").val("yes");
+        	}else{
+        		$("#save_pwd").val("no");
+        	}
+  	    	var username = $("#username").val();
+  	    	var password = $("#password").val();
+  	    	$.ajax({
+  	    		url:"/Project1/user/login",
+  	    		dataType:"json",
+  	    		type:"post",
+  	    		data:{"username":username,"password":password , "save_pwd":$("#save_pwd").val()},
+  	    		success:function(data){
+  	    			if(data.code == 0){
+  	    				window.location = "/Project1/pages/index.html";
+  	    			}else{
+  	    				alert("密码错误");
+  	    			}
+  	    		}
+  	    	})
+  	    	
+  	    })
+    }
+  	
+/* 
+	BAIDUID=4C355BE5FADAAE860D580FCC5D575826:FG=1; BIDUPSID=4C355BE5FADAAE860D580FCC5D575826; PSTM=1552122853; BDORZ=B490B5EBF6F3CD402E515D22BCDA1598;
+*
+*/
+  	//获取cookie
+  	function checkCookie(){
+  		var name= "username=";	 
+  		var pwd = "password=";
+  		
+  		var cookies = document.cookie.split(";");
+  		alert(cookies.length)
+  		for(var i = 0 ; i < cookies.length ; i ++){
+  			var c = cookies[i];
+  		alert("cookie:"+ c )
+  			if(c.indexOf(name) != -1 ){
+  				$("#username").val(c.substring(name.length,c.length))
+  				$("#checkbox").checked = "true";
+  			}else if(c.indexOf(pwd) != -1){
+  				$("#password").val(c.substring(pwd.length,c.length));
+  			}
+  		}
+  	}
+  	
+   
+   
+</script>
 </html>

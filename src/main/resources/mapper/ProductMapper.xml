@@ -3,6 +3,25 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhiyou100.mapper.ProductMapper">
+	<resultMap type="com.zhiyou100.pojo.Region" id="regionMap">
+		<id property="id" column="REGION_ID"/>
+		<result property="code" column="REGION_CODE"/>
+		<result property="name" column="REGION_NAME"/>
+		<result property="parentId" column="PARENT_ID"/>
+		<result property="level" column="REGION_LEVEL"/>
+		<result property="order" column="REGION_ORDER"/>
+		<result property="nameEn" column="REGION_NAME_EN"/>
+		<result property="shortNameEn" column="REGION_SHORTNAME_EN"/>
+	</resultMap>
+	
+	<resultMap type="ProjectType" id="projectTypeMap">
+		<id column="pst_id" property="id"/>
+		<result column="pst_name" property="name"/>
+		<result column="pst_desc" property="desc"/>
+		<result column="pst_stardate" property="stardate"/>
+		<result column="pst_type" property="type"/>
+	</resultMap>
+	
 	<!-- <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/> -->
 	<!-- <insert id="addPic" parameterType="img"	>
 		insert into img(username , img)
@@ -19,5 +38,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</foreach>
 	
 	</insert>
+	<select id="findAllProvince" resultMap="regionMap">
+		select * 
+		from region
+		where PARENT_ID = '1'
+		
+	</select>
+	
+	<select id="findAllCities" parameterType="java.lang.Integer" resultMap="regionMap">
+		select * 
+		from region
+		where PARENT_ID = #{id}
+		
+	</select>
+	
+	<select id="findAllProjectType" resultMap="projectTypeMap">
+		select *
+		from projectstype
+		
+	</select>
 	
 </mapper>
